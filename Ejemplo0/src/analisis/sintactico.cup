@@ -1,0 +1,51 @@
+package analisis;
+//importaciones si fuese necesario
+import java_cup.runtime.Symbol;
+import java.util.LinkedList;
+//codigo de la clase parser
+parser code 
+{:
+    public LinkedList<String> cadenas = new LinkedList<String>();
+    public void syntax_error(Symbol s){
+        System.out.println("Error Sintactico Recuperable");
+    }
+
+    public void unrecovered_syntax_error(Symbol s){
+        System.out.println("Error Sintactico no recuperable");
+    }
+:}
+
+action code
+{:
+    String codigoUsr="";
+:}
+
+terminal MENOR, MAYOR, LLAVE1, LLAVE2, PAR1, PAR2;
+terminal DIV, PUNTO, TK_EJEMPLO, TK_SYSTEM, TK_PRINT;
+terminal TK_LINE, TK_CONCAT, FINCADENA, COMA;
+terminal String ENTEROS, CADENA;
+
+nonterminal INSTRUCCIONES, INSTRUCCION;
+nonterminal String EXPRESION, CONCATENACION;
+nonterminal String INICIO;
+
+start with INICIO;
+
+INICIO ::= MENOR TK_EJEMPLO MAYOR INSTRUCCIONES MENOR DIV TK_EJEMPLO MAYOR
+{:RESULT = codigoUsr; :}
+;
+
+INSTRUCCIONES ::= INSTRUCCION INSTRUCCIONES
+                | INSTRUCCION
+;
+
+INSTRUCCION ::= TK_SYSTEM PUNTO TK_PRINT PUNTO TK_LINE LLAVE1 EXPRESION:e LLAVE2 FINCADENA
+{:   System.out.println(e); cadenas.add(e); codigoUsr+= e+"\n";   :}
+;
+
+EXPRESION ::= CONCATENACION:c    {:   RESULT = c;   :}
+            | CADENA:c            {:   RESULT = c;   :}            
+;
+
+CONCATENACION ::= TK_CONCAT PAR1 CADENA:c COMA ENTEROS:e PAR2 {: RESULT = ""+c+" - "+e; :}
+;
