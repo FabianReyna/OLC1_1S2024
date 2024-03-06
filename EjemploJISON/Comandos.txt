@@ -1,0 +1,10 @@
+npm init -y
+tsc -init
+npm i cors express morgan nodemon typescript body-parser
+npm i jison
+
+----------------------------------------------------------
+npm run build -> compilar codigo de ts -> jison
+npm run start -> demonio que ejecuta codigo
+npm run server -> ejecucion del servidor
+npm run jison -> compila archivo.jison y lo mueve a la carpeta correspondiente
